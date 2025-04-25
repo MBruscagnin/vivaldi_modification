@@ -1,55 +1,50 @@
-/* top */
-#header:not(:empty) {
-    display: none !important;
-}
-
-#app:has(.inner:not(:hover)) #header:not(:empty) {
-    display: flex !important;
-}
-
-
-/* left */
-
-:is(#app:has(#header:empty), #app:has(#header .tabless)) {
-    .tabbar-wrapper {
-        /* if you do not want auto toggle  tab bar, comment this line */
-        /* display: none !important; */
-
-        &:hover {
-            display: flex !important;
-        }
+:root {
+    --overlay-top-height: 9px;
+    --overlay-side-width: 8px;
+    --toggle-duration: 0.3s;
+  }
+  #header:not(:empty) {
+    opacity: 1;
+    transition: opacity var(--toggle-duration) ease-in-out;
+  }
+  #app:has(.inner:hover) #header:not(:empty) {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #app:has(#header:empty) .tabbar-wrapper,
+  #app:has(#header .tabless) .tabbar-wrapper {
+    opacity: 0;
+    transition: opacity var(--toggle-duration) ease-in-out;
+  }
+  #app:has(#header:empty) .tabbar-wrapper:hover,
+  #app:has(#header .tabless) .tabbar-wrapper:hover,
+  #app:has(#panels-container:hover) .tabbar-wrapper {
+    opacity: 1;
+  }
+  .top-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--overlay-top-height);
+    z-index: 1000;
+    pointer-events: auto;
+  }
+  .side-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--overlay-side-width);
+    height: 100vh;
+    z-index: 1000;
+    pointer-events: auto;
+  }
+  @supports not selector(:has()) {
+    #app.hover-trigger .inner:hover ~ #header:not(:empty) {
+      opacity: 1;
+      pointer-events: auto;
     }
-
-    .inner:has(.thumbnail-image) {
-        #tabs-container {
-            width: 100%;
-        }
-
-        .tab-position {
-            position: relative;
-            height: var(--Width);
-            transform: none;
-        }
-
-        .tab.force-hover {
-            height: min-content;
-        }
-
-        .tab-wrapper {
-            max-height: fit-content;
-        }
-
-        .svg-tab-selection {
-            aspect-ratio: 1 / 1;
-            height: 100%;
-            max-height: fit-content;
-        }
+    #app.hover-trigger .tabbar-wrapper:hover {
+      opacity: 1;
     }
-
-
-
-}
-
-#app:has(#panels-container:hover) .tabbar-wrapper {
-    display: flex !important;
-}
+  }
